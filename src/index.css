@@ -1,0 +1,94 @@
+* {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+@import "tailwindcss";
+
+:root {
+  --color-primary: #800080;   /* Purple */
+  --color-secondary: #707070; /* Gray */
+  /* --color-background: #ffffff; */
+  /* --color-text: #111827; */
+}
+
+p {
+  font-size: small;
+}
+
+span {
+  font-size: 12px;
+}
+
+/* h1 {
+  font-size: xx-large;
+} */
+
+h6 {
+  font-size: 16px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.swiper-pagination-bullet {
+  background-color: #00000030;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #000000 !important;
+  width: 40px !important;
+  border-radius: 36px !important;
+}
+
+/* ===== Custom Navigation for Hero Slider Only ===== */
+.hero-prev,
+.hero-next {
+  background: white;
+  color: black;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px; /* fully rounded */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.hero-prev:hover,
+.hero-next:hover {
+  background: #800080; /* your accent color */
+  transform: scale(1.05);
+}
+
+.hero-prev:hover img,
+.hero-next:hover img{
+    filter: invert(1);
+
+}
+
+/* Smaller arrow icon size */
+.hero-prev::after,
+.hero-next::after {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Adjust position */
+.hero-prev {
+  left: 50px !important;
+}
+
+.hero-next {
+  right: 50px !important;
+}
+
+/* Optional: hide on mobile */
+@media (max-width: 640px) {
+  .hero-prev,
+  .hero-next {
+    display: none;
+  }
+}
