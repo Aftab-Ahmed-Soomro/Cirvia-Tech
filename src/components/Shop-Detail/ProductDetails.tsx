@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function ProductDetails() {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -82,7 +82,8 @@ export default function ProductDetails() {
 
             {/* Description */}
             <p className="text-[#707070] text-sm sm:text-base mb-4">
-              Vestibulum nulla tortor, eleifend a gravida ac, tincidunt eu odio Maecenas eget est et elit scels sem, vehicula vel hendrerit.
+              Vestibulum nulla tortor, eleifend a gravida ac, tincidunt eu odio.
+              Maecenas eget est et elit scels sem, vehicula vel hendrerit.
             </p>
 
             {/* Rating */}
@@ -100,21 +101,27 @@ export default function ProductDetails() {
             {/* Price */}
             <div className="flex items-center gap-3 mb-4">
               <h2 className="text-xl font-bold text-black">$399.99</h2>
-              <span className="text-xl text-[#707070] font-semibold line-through">$599.99</span>
+              <span className="text-xl text-[#707070] font-semibold line-through">
+                $599.99
+              </span>
             </div>
 
             {/* Stock Status */}
             <div className="flex items-center gap-2 mb-4">
               <span className="w-2 h-2 bg-green-500 rounded-full"></span>
               <span className="text-green-600 font-medium text-sm">In Stock</span>
-              <span className="text-[#707070] text-sm">, In stock, ready to be shipped.</span>
+              <span className="text-[#707070] text-sm">
+                , In stock, ready to be shipped.
+              </span>
             </div>
 
             {/* Color Selection */}
             <div className="mb-4">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-sm font-semibold text-black">Color:</span>
-                <span className="text-sm text-[#707070]">Space grey</span>
+                <span className="text-sm text-[#707070] capitalize">
+                  {selectedColor.replace('-', ' ')}
+                </span>
               </div>
               <div className="flex gap-3">
                 {colors.map((color) => (
@@ -122,7 +129,9 @@ export default function ProductDetails() {
                     key={color.name}
                     onClick={() => setSelectedColor(color.name)}
                     className={`w-10 h-10 rounded-full ${color.class} border-2 transition-all ${
-                      selectedColor === color.name ? 'border-gray-900 scale-110' : 'border-gray-200'
+                      selectedColor === color.name
+                        ? 'border-gray-900 scale-110'
+                        : 'border-gray-200'
                     }`}
                     aria-label={color.label}
                   />
@@ -134,13 +143,17 @@ export default function ProductDetails() {
             <div className="mb-4">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-sm font-semibold text-black">Storage:</span>
-                <span className="text-sm text-[#707070]">512gb</span>
+                <span className="text-sm text-[#707070] uppercase">
+                  {selectedStorage}
+                </span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {storageOptions.map((storage) => (
                   <button
                     key={storage}
-                    onClick={() => setSelectedStorage(storage.toLowerCase().replace(' ', ''))}
+                    onClick={() =>
+                      setSelectedStorage(storage.toLowerCase().replace(' ', ''))
+                    }
                     className={`px-4 py-2 rounded-full text-[12px] font-medium transition-all ${
                       selectedStorage === storage.toLowerCase().replace(' ', '')
                         ? 'bg-black text-white'
@@ -157,17 +170,11 @@ export default function ProductDetails() {
             <div className="flex flex-col sm:flex-row gap-4 mb-4">
               {/* Quantity Selector */}
               <div className="flex items-center border border-[#707070] rounded-full px-5 py-2 w-full sm:w-28">
-                <button
-                  onClick={decreaseQuantity}
-                  className="font-medium text-lg"
-                >
+                <button onClick={decreaseQuantity} className="font-medium text-lg">
                   −
                 </button>
                 <span className="flex-1 text-center font-medium">{quantity}</span>
-                <button
-                  onClick={increaseQuantity}
-                  className="font-medium text-lg"
-                >
+                <button onClick={increaseQuantity} className="font-medium text-lg">
                   +
                 </button>
               </div>
@@ -179,7 +186,7 @@ export default function ProductDetails() {
             </div>
 
             {/* Buy Now Button */}
-            <button className="w-full bg-[#800080] text-white rounded-full py-3 px-6 font-medium  transition-colors text-sm">
+            <button className="w-full bg-[#800080] text-white rounded-full py-3 px-6 font-medium transition-colors text-sm">
               Buy It Now
             </button>
           </div>

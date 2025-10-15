@@ -1,8 +1,24 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, Trash2, Heart, Minus, Plus } from 'lucide-react';
 
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  originalPrice: number | null;
+  discount: number;
+  quantity: number;
+  selected: boolean;
+  promoCode: string;
+}
+
+interface Item {
+  name: string;
+  price: number;
+}
+
 export default function ShoppingCart() {
-  const [products, setProducts] = useState([
+  const [products, setProducts] = useState<Product[]>([
     { id: 1, name: 'Samsung Galaxy M54 5G 8/256GB - Dark Blue', price: 630, originalPrice: 300, discount: 20, quantity: 1, selected: false, promoCode: '' },
     { id: 2, name: 'Samsung Galaxy M54 5G 8/256GB - Dark Blue', price: 630, originalPrice: 300, discount: 20, quantity: 3, selected: true, promoCode: '' },
     { id: 3, name: 'Samsung Galaxy M54 5G 8/256GB - Dark Blue', price: 630, originalPrice: null, discount: 0, quantity: 1, selected: true, promoCode: '#KK72646' },
@@ -10,7 +26,7 @@ export default function ShoppingCart() {
     { id: 5, name: 'Tecno Camon 20 Premier 5G 8/512GB - Dark Welkin', price: 630, originalPrice: 300, discount: 20, quantity: 2, selected: true, promoCode: '' }
   ]);
 
-  const [itemList] = useState([
+  const [itemList] = useState<Item[]>([
     { name: 'Samsung Galaxy Z Flip5 8/256GB - Graphite x3', price: 4200 },
     { name: 'Samsung Galaxy M54 5G 8/256GB - Dark Blue x1', price: 1200 },
     { name: 'Samsung Galaxy Tab S9 FE+ Wi-Fi 8/128GB - Gray x1', price: 720 },
@@ -25,16 +41,16 @@ export default function ShoppingCart() {
   const shipping = 0;
   const promoDiscount = 800;
 
-  const toggleSelectAll = () => {
+  const toggleSelectAll = (): void => {
     setSelectAll(!selectAll);
     setProducts(products.map(p => ({ ...p, selected: !selectAll })));
   };
 
-  const toggleProduct = (id) => {
+  const toggleProduct = (id: number): void => {
     setProducts(products.map(p => p.id === id ? { ...p, selected: !p.selected } : p));
   };
 
-  const updateQuantity = (id, delta) => {
+  const updateQuantity = (id: number, delta: number): void => {
     setProducts(products.map(p => {
       if (p.id === id) {
         const newQty = Math.max(1, p.quantity + delta);
@@ -60,27 +76,27 @@ export default function ShoppingCart() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Section - Cart Items */}
           <div className="flex-1 py-4 md:py-6">
-            <div className='flex justify-between items-center'>
-                {/* Header */}
-            <div className="mb-6">
-              <h1 className="text-2xl md:text-3xl font-bold text-[#800080] mb-2">Your Cart</h1>
-              <p className="text-[#7E7E7E] text-sm md:text-base">
-                Displaying <span className="font-semibold">1-{displayedProducts} products</span> out of a total of{' '}
-                <span className="font-semibold">{totalProducts} products</span> on your cart
-              </p>
-            </div>
-
-            {/* Search Bar */}
-            <div className="mb-6">
-              <div className="relative flex items-center">
-                <input
-                  type="text"
-                  placeholder="Keyword Product"
-                  className="w-full px-4 py-2 border text-[#7E7E7E] border-gray-300 text-[8px] sm:text-[10px] md:text-[14px] bg-[#EEEEEE] rounded-lg"
-                />
-                <Search className="absolute right-3 top-2.5 text-black font-bold" size={15} />
+            <div className="flex justify-between items-center">
+              {/* Header */}
+              <div className="mb-6">
+                <h1 className="text-2xl md:text-3xl font-bold text-[#800080] mb-2">Your Cart</h1>
+                <p className="text-[#7E7E7E] text-sm md:text-base">
+                  Displaying <span className="font-semibold">1-{displayedProducts} products</span> out of a total of{' '}
+                  <span className="font-semibold">{totalProducts} products</span> on your cart
+                </p>
               </div>
-            </div>
+
+              {/* Search Bar */}
+              <div className="mb-6">
+                <div className="relative flex items-center">
+                  <input
+                    type="text"
+                    placeholder="Keyword Product"
+                    className="w-full px-4 py-2 border text-[#7E7E7E] border-gray-300 text-[8px] sm:text-[10px] md:text-[14px] bg-[#EEEEEE] rounded-lg"
+                  />
+                  <Search className="absolute right-3 top-2.5 text-black font-bold" size={15} />
+                </div>
+              </div>
             </div>
 
             {/* Select All */}
@@ -189,7 +205,7 @@ export default function ShoppingCart() {
             {/* Payment Card */}
             <div className="bg-white rounded-lg border-[1px] border-[#C2C2C2] p-6">
               <h2 className="text-medium font-semibold text-[#131313] mb-4">Payment</h2>
-              
+
               {/* Item List */}
               <div className="mb-6">
                 <h3 className="font-semibold text-sm mb-3">Item List</h3>
@@ -241,7 +257,15 @@ export default function ShoppingCart() {
             <div className="bg-white rounded-lg border-[1px] border-[#C2C2C2] p-6">
               <h3 className="font-semibold mb-4">Payment Method</h3>
               <div className="grid grid-cols-4 gap-3">
-                {['/assets/imgs/method-1.png', '/assets/imgs/method-2.png', '/assets/imgs/method-3.png', '/assets/imgs/method-4.png', '/assets/imgs/method-5.png', '/assets/imgs/method-6.png', '/assets/imgs/method-7.png'].map((method, idx) => (
+                {[
+                  '/assets/imgs/method-1.png',
+                  '/assets/imgs/method-2.png',
+                  '/assets/imgs/method-3.png',
+                  '/assets/imgs/method-4.png',
+                  '/assets/imgs/method-5.png',
+                  '/assets/imgs/method-6.png',
+                  '/assets/imgs/method-7.png',
+                ].map((method, idx) => (
                   <div key={idx} className="roundedflex items-center justify-center text-xs font-semibold h-10">
                     <img src={method} alt="" />
                   </div>

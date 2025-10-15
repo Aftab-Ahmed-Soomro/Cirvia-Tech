@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Button2 from '../../common/Button2';
+import { useEffect, useRef, useState } from 'react';
 import { MoveRight } from 'lucide-react';
 
 const PopularProducts: React.FC = () => {
@@ -148,8 +147,8 @@ const PopularProducts: React.FC = () => {
 
   const [minVal, setMinVal] = useState(0);
   const [maxVal, setMaxVal] = useState(6969);
-  const [activeHandle, setActiveHandle] = useState(null);
-  const sliderRef = useRef(null);
+  const [activeHandle, setActiveHandle] = useState<"min" | "max" | null>(null);
+  const sliderRef = useRef<HTMLDivElement | null>(null);
 
   const MIN = 0;
   const MAX = 10000;
@@ -157,17 +156,17 @@ const PopularProducts: React.FC = () => {
   const minPercent = ((minVal - MIN) / (MAX - MIN)) * 100;
   const maxPercent = ((maxVal - MIN) / (MAX - MIN)) * 100;
 
-  const getValueFromPosition = (clientX) => {
+  const getValueFromPosition = (clientX: number): number => {
     if (!sliderRef.current) return MIN;
     const rect = sliderRef.current.getBoundingClientRect();
     const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     return Math.round(MIN + percent * (MAX - MIN));
   };
 
-  const handleMove = (e) => {
+  const handleMove = (e: MouseEvent | TouchEvent): void => {
     if (!activeHandle) return;
 
-    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    const clientX = e instanceof TouchEvent ? e.touches[0].clientX : e.clientX;
     const value = getValueFromPosition(clientX);
 
     if (activeHandle === 'min') {
@@ -177,7 +176,7 @@ const PopularProducts: React.FC = () => {
     }
   };
 
-  const handleEnd = () => {
+  const handleEnd = (): void => {
     setActiveHandle(null);
   };
 
@@ -304,7 +303,7 @@ const PopularProducts: React.FC = () => {
 
       {/* Super Sale Image - Only show on desktop */}
       <div className="hidden lg:block">
-        <img className='rounded-[20px] lg:rounded-[30px] w-full' src="/assets/imgs/super-sale.jpg" alt="" />
+        <img className='rounded-[20px] lg:rounded-[30px] w-full' src="/assets/imgs/super-sale.jpg" alt="Super sale" />
       </div>
     </div>
   );
@@ -332,111 +331,118 @@ const PopularProducts: React.FC = () => {
           </div>
         )}
 
-        {/* Desktop Sidebar - Hidden on mobile, visible on desktop */}
+        {/* Desktop Sidebar */}
         <div className='hidden lg:block w-full lg:w-[35%] xl:w-[30%] lg:pr-6'>
           <div className="top-4 mt-10">
             <FilterSection />
           </div>
         </div>
-      
-      {/* Main Content Area */}
-      <div className="w-full lg:w-[65%] xl:w-[70%] py-6 sm:py-8 lg:py-12 xl:py-16">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
-          <div>
-            <p className="text-xs font-base text-black mb-1 tracking-wide">100% PREMIUM QUALITY</p>
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl tracking-tight font-semibold text-black">
-              Our Popular Products
-            </h2>
+
+        {/* Main Content */}
+        <div className="w-full lg:w-[65%] xl:w-[70%] py-6 sm:py-8 lg:py-12 xl:py-16">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+              <div>
+                <p className="text-xs font-base text-black mb-1 tracking-wide">100% PREMIUM QUALITY</p>
+                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl tracking-tight font-semibold text-black">
+                  Our Popular Products
+                </h2>
+              </div>
+            </div>
+
+            {/* Products Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+              {products.map((product) => (
+                <a
+                  href="#0"
+                  key={product.id}
+                  className="group bg-white rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 shadow-sm"
+                >
+                  {/* Image */}
+                  <div className="relative p-4 sm:p-6 aspect-square flex items-center justify-center overflow-hidden">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="px-3 sm:px-4 py-0">
+                    {/* Colors */}
+                    <div className="flex gap-1 sm:gap-2 mb-2 sm:mb-3">
+                      {product.colors.map((color, index) => (
+                        <button
+                          key={index}
+                          className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors"
+                          style={{ backgroundColor: color }}
+                          title={`Color option ${index + 1}`}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Rating */}
+                    <div className="flex items-center gap-1 mb-2">
+                      <p className="text-sm sm:text-base">★★★★★</p>
+                      <h2 className='text-[#a3a3a3] text-xs font-light'>(3)</h2>
+                    </div>
+
+                    {/* Name */}
+                    <h3 className="text-xs sm:text-sm font-md text-black mb-2">
+                      {product.name}
+                    </h3>
+
+                    {/* Price */}
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <div>
+                        <span className="text-sm sm:text-lg me-2 font-md text-black">
+                          ${product.price.toFixed(2)}
+                        </span>
+                        <span className="text-xs sm:text-sm text-[#a3a3a3] line-through">
+                          ${product.originalPrice.toFixed(2)}
+                        </span>
+                      </div>
+                      <div>
+                        <button className="relative border-[1px] border-[#800080] p-1.5 sm:p-2 bg-[#800080] rounded-full transition-colors">
+                          <img width={12} className="sm:w-[15px]" src="/assets/imgs/bag2.png" alt="Add to bag" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            <div className='flex justify-end mt-10 gap-2'>
+              <p className='text-white rounded-[12px] border bg-[#800080] py-2 px-4 cursor-pointer transition-all 
+                hover:bg-[#6b006b] hover:border-[#6b006b]'>
+                1
+              </p>
+              <p className='text-black rounded-[12px] border border-[#00000017] py-2 px-4 cursor-pointer transition-all
+                hover:bg-[#f2e6f2] hover:border-[#800080]'>
+                2
+              </p>
+              <p className='text-black rounded-[12px] border border-[#00000017] py-2 px-4 cursor-pointer transition-all
+                hover:bg-[#f2e6f2] hover:border-[#800080]'>
+                3
+              </p>
+              <p className='text-black rounded-[12px] border border-[#00000017] py-2 px-4 cursor-pointer transition-all
+                hover:bg-[#f2e6f2] hover:border-[#800080]'>
+                4
+              </p>
+              <p className='text-black rounded-[12px] border border-[#00000017] py-2 px-4 cursor-pointer transition-all
+                hover:bg-[#f2e6f2] hover:border-[#800080] flex items-center gap-2'>
+                Next <MoveRight size={16} />
+              </p>
+            </div>
+
           </div>
         </div>
-
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-          {products.map((product) => (
-            <a
-            href='#0'
-              key={product.id}
-              className="group bg-white rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 shadow-sm"
-            >
-              {/* Image Container */}
-              <div className="relative p-4 sm:p-6 aspect-square flex items-center justify-center overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-
-              {/* Product Info */}
-              <div className="px-3 sm:px-4 py-0">
-                {/* Color Options */}
-                <div className="flex gap-1 sm:gap-2 mb-2 sm:mb-3">
-                  {product.colors.map((color, index) => (
-                    <button
-                      key={index}
-                      className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors"
-                      style={{ backgroundColor: color }}
-                      title={`Color option ${index + 1}`}
-                    />
-                  ))}
-                </div>
-
-                {/* Rating */}
-                <div className="flex items-center gap-1 mb-2">
-                  <p className="text-sm sm:text-base">★★★★★</p>
-                  <h2 className='text-[#a3a3a3] text-xs font-light'>(3)</h2>
-                </div>
-
-                {/* Product Name */}
-                <h3 className="text-xs sm:text-sm font-md text-black mb-2">
-                  {product.name}
-                </h3>
-
-                {/* Price */}
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <div>
-                    <span className="text-sm sm:text-lg me-2 font-md text-black">
-                      ${product.price.toFixed(2)}
-                    </span>
-                    <span className="text-xs sm:text-sm text-[#a3a3a3] line-through">
-                      ${product.originalPrice.toFixed(2)}
-                    </span>
-                  </div>
-                  <div>
-                    <button className="relative border-[1px] border-[#800080] p-1.5 sm:p-2 bg-[#800080] rounded-full transition-colors">
-                    <img width={12} className="sm:w-[15px]" src="/assets/imgs/bag2.png" alt="" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
-        <div className='flex justify-end mt-10 gap-2'>
-          <p className='text-white rounded-[12px] border bg-[#800080] py-2 px-4 cursor-pointer transition-all 
-            hover:bg-[#6b006b] hover:border-[#6b006b]'>
-            1
-          </p>
-          <p className='text-black rounded-[12px] border border-[#00000017] py-2 px-4 cursor-pointer transition-all
-            hover:bg-[#f0e9fa] hover:text-black hover:border-[#800080]'>
-            2
-          </p>
-          <p className='text-black rounded-[12px] border border-[#00000017] py-2 px-4 cursor-pointer transition-all
-            hover:bg-[#f0e9fa] hover:text-black hover:border-[#800080]'>
-            3
-          </p>
-          <p className='text-black rounded-[12px] border border-[#00000017] py-2 px-4 cursor-pointer transition-all
-            hover:bg-[#f0e9fa] hover:text-black hover:border-[#800080] flex items-center'>
-            <MoveRight />
-          </p>
-        </div>
-      </div>
-      </div>
       </div>
     </div>
   );
-}
+};
 
-export default PopularProducts
+export default PopularProducts;
